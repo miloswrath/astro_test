@@ -23,13 +23,47 @@ Want me to draft the final FR, Non-FR, and scope doc text next?
 - [ ] Add unit tests for config parsing/validation and request parameter construction logic only.
 
 ***checkpoint 2***
-- [ ] Implement astronomy API client call to ipgeolocation using the built request parameters.
-- [ ] Add response handling that prints the full API payload as pretty-printed JSON to stdout.
-- [ ] Add minimal non-retry error handling for HTTP/network/API error responses (in-scope guardrails only).
-- [ ] Add unit tests for API client success/error branches and stdout pretty-print behavior only (mock HTTP + capture stdout).
+- [x] Implement astronomy API client call to ipgeolocation using the built request parameters.
+- [x] Add response handling that prints the full API payload as pretty-printed JSON to stdout.
+- [x] Add minimal non-retry error handling for HTTP/network/API error responses (in-scope guardrails only).
+- [x] Add unit tests for API client success/error branches and stdout pretty-print behavior only (mock HTTP + capture stdout).
 
 ***checkpoint 3***
-- [ ] Implement field mapping/extraction for moon phase, moon altitude, sunset time, and moonrise time from returned payload shape.
-- [ ] Print mapped values in a small summary block after the full JSON dump.
-- [ ] Add/update feature documentation for run command, required .env, and expected output contract.
-- [ ] Add unit tests for mapping/extraction and summary output formatting only (fixture-based payload tests).
+- [x] Implement field mapping/extraction for moon phase, moon altitude, sunset time, and moonrise time from returned payload shape.
+- [x] Print mapped values in a small summary block after the full JSON dump.
+- [x] Add/update feature documentation for run command, required .env, and expected output contract.
+- [x] Add unit tests for mapping/extraction and summary output formatting only (fixture-based payload tests).
+
+## Runtime Notes (Checkpoint 2 + 3)
+
+Run command (from project root):
+
+```bash
+python app/fetch_astronomy.py
+```
+
+Required `.env` in project root:
+
+```dotenv
+IPGEOLOCATION_API_KEY=<your_api_key>
+```
+
+Output contract:
+
+1. Script prints full astronomy API response as pretty-printed JSON.
+2. Script prints a blank line.
+3. Script prints this summary block:
+
+```text
+Summary:
+Moon phase: <moon_phase or N/A>
+Moon altitude: <moon_altitude or N/A>
+Sunset: <sunset or N/A>
+Moonrise: <moonrise or N/A>
+```
+
+Request behavior:
+
+- Date uses today's date in `America/Chicago`.
+- First request candidate uses Iowa City city/state location string.
+- Fallback request candidate uses hardcoded Iowa City coordinates (`41.6611`, `-91.5302`).
