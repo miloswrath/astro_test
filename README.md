@@ -39,3 +39,5 @@ Stargazing score: 82 / 100
 ```
 
 Extra: plot darkness timeline.
+
+Erin Morgenthaler
