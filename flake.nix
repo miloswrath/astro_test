@@ -63,25 +63,30 @@
           ]
           # ++ [catppuccin-jupyterlab] # include the theme here
       );
-    in {
-      default = pkgs.mkShellNoCC {
-        # IMPORTANT: do NOT activate a venv here; it will shadow pythonEnv
-        packages = [
-          pythonEnv
-          pkgs.git
-        ];
+        in {
+          default = pkgs.mkShellNoCC {
+            # IMPORTANT: do NOT activate a venv here; it will shadow pythonEnv
+            packages = [
+              pythonEnv
+              pkgs.git
+              pkgs.uv
+            ];
 
-        # Optional: install a kernel spec matching this env
-        postShellHook = ''
-          KERNEL_NAME="jl-313"
-          KERNEL_DIR="$HOME/.local/share/jupyter/kernels/$KERNEL_NAME"
-          if [ ! -d "$KERNEL_DIR" ]; then
-            python -m ipykernel install --user \
-              --name "$KERNEL_NAME" \
-              --display-name "Python 3.13 (flake)" >/dev/null
-          fi
-        '';
-      };
-    });
-  };
+            shellHook = ''
+              uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+              export PATH="$HOME/.local/bin:$PATH"
+            '';
+            postShellHook = ''
+              KERNEL_NAME="jl-313"
+              KERNEL_DIR="$HOME/.local/share/jupyter/kernels/$KERNEL_NAME"
+              if [ ! -d "$KERNEL_DIR" ]; then
+                python -m ipykernel install --user \
+                  --name "$KERNEL_NAME" \
+                  --display-name "Python 3.13 (flake)" >/dev/null
+              fi
+            '';
+          };
+        });
+    };
 }
+
